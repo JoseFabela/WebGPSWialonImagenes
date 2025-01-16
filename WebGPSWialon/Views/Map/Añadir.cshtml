@@ -1,0 +1,24 @@
+﻿@model WebGPSWialon.Models.ImagenesViewModel
+
+@{
+    ViewBag.Title = "Añadir Parámetros";
+}
+
+<h2>Añadir Parámetros</h2>
+
+@using (Html.BeginForm("ObtenerImagenes", "Map", FormMethod.Post))
+{
+    <div>
+        @Html.LabelFor(model => model.UnitId)
+        @Html.TextBoxFor(model => model.UnitId)
+    </div>
+    <div>
+        @Html.LabelFor(model => model.TimeFrom)
+        @Html.TextBoxFor(model => model.TimeFrom)
+    </div>
+    <div>
+        @Html.LabelFor(model => model.TimeTo)
+        @Html.TextBoxFor(model => model.TimeTo)
+    </div>
+    <button type="submit">Buscar Imágenes</button>
+}

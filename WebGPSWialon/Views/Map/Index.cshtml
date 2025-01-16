@@ -1,0 +1,22 @@
+﻿@using Newtonsoft.Json
+@model WebGPSWialon.Models.ImagenesViewModel
+
+@{
+    List<string> imagenUrls = TempData["ImagenUrls"] != null
+        ? JsonConvert.DeserializeObject<List<string>>(TempData["ImagenUrls"].ToString())
+        : new List<string>();
+}
+
+@if (imagenUrls != null && imagenUrls.Count > 0)
+{
+    <div>
+        @foreach (var url in imagenUrls)
+        {
+            <img src="@url" alt="Imagen obtenida" style="max-width: 200px; max-height: 200px; margin: 10px;" />
+        }
+    </div>
+}
+else
+{
+    <p>No hay imágenes para mostrar.</p>
+}
