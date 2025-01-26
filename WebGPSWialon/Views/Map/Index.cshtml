@@ -2,21 +2,42 @@
 @model WebGPSWialon.Models.ImagenesViewModel
 
 @{
+    // Obtener la lista de nombres de archivos de imágenes desde TempData
     List<string> imagenUrls = TempData["ImagenUrls"] != null
         ? JsonConvert.DeserializeObject<List<string>>(TempData["ImagenUrls"].ToString())
         : new List<string>();
+
+    // Obtener la URL del video generado desde TempData
+    var videoUrl = TempData["VideoUrl"] as string;
+
+    // Definir la ruta base para las imágenes guardadas en wwwroot/imagenes/
+    string baseImageUrl = "/imagenes/";  // Esto asume que las imágenes están en wwwroot/imagenes/
+
+    // Definir la ruta base para los videos guardados en wwwroot/videos/
+    string baseVideoUrl = "/videos/";  // Esto asume que los videos están en wwwroot/videos/
 }
 
 @if (imagenUrls != null && imagenUrls.Count > 0)
 {
     <div>
-        @foreach (var url in imagenUrls)
+        <h3>Imágenes seleccionadas</h3>
+        @foreach (var index in Enumerable.Range(1, imagenUrls.Count))
         {
-            <img src="@url" alt="Imagen obtenida" style="max-width: 200px; max-height: 200px; margin: 10px;" />
+            // Construir la ruta de la imagen basándose en el índice
+            string imagePath = $"{baseImageUrl}{index}.jpeg";  // El nombre de las imágenes se basa en el índice
+
+            <img src="@imagePath" alt="Imagen obtenida" style="max-width: 200px; max-height: 200px; margin: 10px;" />
         }
     </div>
 }
-else
-{
-    <p>No hay imágenes para mostrar.</p>
-}
+
+<!-- Formulario para generar el video -->
+<form asp-action="CreateVideoFromImages" method="post">
+    <button type="submit" class="btn btn-primary">Crear Video</button>
+</form>
+
+
+
+<form asp-action="CerrarSesion" method="post">
+    <button type="submit" class="btn btn-danger">Cerrar sesión</button>
+</form> 

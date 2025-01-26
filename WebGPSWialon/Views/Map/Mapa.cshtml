@@ -1,0 +1,61 @@
+﻿@using Newtonsoft.Json
+@using WebGPSWialon.Models
+@model List<Ubicacion>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapa</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h2>Ruta del GPS</h2>
+    <div id="map"></div>
+    <script>
+        // Inicializa el mapa
+        var map = L.map('map').setView([0, 0], 13);
+
+        // Agrega una capa base (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Obtén las ubicaciones desde el servidor
+        var ubicaciones = @Html.Raw(JsonConvert.SerializeObject(ViewBag.Ubicaciones));
+
+        // Convierte las ubicaciones en coordenadas para la polyline
+        var puntos = ubicaciones.map(u => [u.Latitud, u.Longitud]);
+
+        // Ajusta el mapa para mostrar todos los puntos
+        var bounds = L.latLngBounds(puntos);
+        map.fitBounds(bounds);
+
+        // Dibuja la línea del trazado en el mapa
+        var polyline = L.polyline(puntos, { color: 'blue' }).addTo(map);
+        // Marca los puntos con iconos y popups
+        puntos.forEach((punto, index) => {
+            var marker = L.marker(punto).addTo(map);
+
+            // Accede a la hora correspondiente para ese punto
+            var ubicacion = ubicaciones[index]; // Asumiendo que 'ubicaciones' tiene las ubicaciones ordenadas
+
+            // Usa la hora de la ubicación en el popup
+            marker.bindPopup(`Punto ${index + 1}<br>Hora: ${ubicacion.Hora}`);
+        });
+
+        // Marca los puntos con iconos y popups
+        // puntos.forEach((punto, index) => {
+        //     var marker = L.marker(punto).addTo(map);
+        //     marker.bindPopup(`Punto ${index + 1}`);
+        // });
+    </script>
+</body>
+</html>

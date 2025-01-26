@@ -6,19 +6,51 @@
 
 <h2>Añadir Parámetros</h2>
 
+<!-- Formulario para buscar imágenes -->
 @using (Html.BeginForm("ObtenerImagenes", "Map", FormMethod.Post))
 {
+    <h3>Buscar Imágenes</h3>
     <div>
-        @Html.LabelFor(model => model.UnitId)
-        @Html.TextBoxFor(model => model.UnitId)
+        @Html.LabelFor(model => model.UnitId, "ID de Unidad")
+        @Html.TextBoxFor(model => model.UnitId, new { @class = "form-control" })
     </div>
     <div>
-        @Html.LabelFor(model => model.TimeFrom)
-        @Html.TextBoxFor(model => model.TimeFrom)
+        @Html.LabelFor(model => model.TimeFrom, "Desde")
+        @Html.TextBoxFor(model => model.TimeFrom, new { @class = "form-control", placeholder = "YYYY-MM-DD HH:mm:ss" })
     </div>
     <div>
-        @Html.LabelFor(model => model.TimeTo)
-        @Html.TextBoxFor(model => model.TimeTo)
+        @Html.LabelFor(model => model.TimeTo, "Hasta")
+        @Html.TextBoxFor(model => model.TimeTo, new { @class = "form-control", placeholder = "YYYY-MM-DD HH:mm:ss" })
     </div>
-    <button type="submit">Buscar Imágenes</button>
+    <button type="submit" class="btn btn-primary">Buscar Imágenes</button>
+}
+
+<hr />
+
+<!-- Formulario para seleccionar una unidad y mostrar ubicaciones -->
+@using (Html.BeginForm("Mapa", "Map", FormMethod.Post))
+{
+    <h3>Seleccionar Unidad y Mostrar Mapa</h3>
+    <div>
+        <label for="unitSelect">Selecciona una unidad:</label>
+        <select id="unitSelect" name="SelectedUnitId" class="form-control">
+            <option value="">-- Seleccionar Unidad --</option>
+            @if (ViewBag.Units != null)
+            {
+                foreach (var unit in ViewBag.Units as List<SelectListItem>)
+                {
+                    <option value="@unit.Value">@unit.Text</option>
+                }
+            }
+        </select>
+    </div>
+    <div>
+        <label for="timeFrom">Desde (timestamp):</label>
+        <input type="text" id="timeFrom" name="timeFrom" class="form-control" placeholder="Ejemplo: 1736836035" />
+    </div>
+    <div>
+        <label for="timeTo">Hasta (timestamp):</label>
+        <input type="text" id="timeTo" name="timeTo" class="form-control" placeholder="Ejemplo: 1736922435" />
+    </div>
+    <button type="submit" class="btn btn-secondary">Mostrar Mapa</button>
 }
